@@ -9,4 +9,16 @@ class reviews extends Model
 {
     /** @use HasFactory<\Database\Factories\ReviewsFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'hotel_id',
+        'rating',
+        'comment',
+    ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

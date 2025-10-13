@@ -11,4 +11,10 @@ class Room_type extends Model
     use HasFactory;
 
     public $guarded = ['id', 'created_at', 'updated_at'];
+
+    public function rooms(){
+
+        return $this->hasMany(Room::class);
+
+    }
 }

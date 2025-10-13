@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('media_rooms', function (Blueprint $table) {
             $table->id();
-            $table->
+            $table->integer("room_id")->references("id")->on("rooms")->onDelete("cascade");
+            $table->string("image_url");
+            $table->string("image_name");
             $table->timestamps();
         });
     }

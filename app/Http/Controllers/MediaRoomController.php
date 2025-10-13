@@ -13,7 +13,12 @@ class MediaRoomController extends Controller
      */
     public function index()
     {
-        //
+        $media_rooms = Media_room::all();
+
+        return response()->json([
+            'success' => true,
+            'data' => $media_rooms,
+        ]);
     }
 
     /**
@@ -29,7 +34,17 @@ class MediaRoomController extends Controller
      */
     public function store(StoreMedia_roomRequest $request)
     {
-        //
+        $request->validate([
+            'room_id' => 'required|integer|exists:rooms,id',
+            'image_url' => 'required|string|max:255',
+            'image_name' => 'required|string|max:100',
+        ]);
+
+        $media_room = Media_room::create($request->all());
+        return response()->json([
+            'success' => true,
+            'data' => $media_room,
+        ], 201);    
     }
 
     /**
@@ -45,7 +60,7 @@ class MediaRoomController extends Controller
      */
     public function edit(Media_room $media_room)
     {
-        //
+
     }
 
     /**
@@ -53,7 +68,18 @@ class MediaRoomController extends Controller
      */
     public function update(UpdateMedia_roomRequest $request, Media_room $media_room)
     {
-        //
+        $request->validate([
+            'room_id' => 'required|integer|exists:rooms,id',
+            'image_url' => 'required|string|max:255',
+            'image_name' => 'required|string|max:100',
+        ]);
+
+        $media_room->update($request->all());
+
+        return response()->json([
+            'success' => true,
+            'data' => $media_room,
+        ]);
     }
 
     /**
@@ -61,6 +87,11 @@ class MediaRoomController extends Controller
      */
     public function destroy(Media_room $media_room)
     {
-        //
+        $media_room->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Media room deleted successfully',
+        ]);
     }
 }

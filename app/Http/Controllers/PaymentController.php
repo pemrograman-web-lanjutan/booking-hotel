@@ -13,7 +13,10 @@ class PaymentController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => Payment::all(),
+        ]);
     }
 
     /**
@@ -29,7 +32,11 @@ class PaymentController extends Controller
      */
     public function store(StorePaymentRequest $request)
     {
-        //
+        $payment = Payment::create($request->validated());
+        return response()->json([
+            'success' => true,
+            'data' => $payment,
+        ], 201);
     }
 
     /**
@@ -53,7 +60,12 @@ class PaymentController extends Controller
      */
     public function update(UpdatePaymentRequest $request, Payment $payment)
     {
-        //
+        $payment->update($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'data' => $payment,
+        ]);
     }
 
     /**
@@ -61,6 +73,11 @@ class PaymentController extends Controller
      */
     public function destroy(Payment $payment)
     {
-        //
+        $payment->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Payment deleted successfully',
+        ]);
     }
 }

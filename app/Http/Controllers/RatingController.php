@@ -13,7 +13,10 @@ class RatingController extends Controller
      */
     public function index()
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => Rating::all(),
+        ]);
     }
 
     /**
@@ -29,7 +32,11 @@ class RatingController extends Controller
      */
     public function store(StoreRatingRequest $request)
     {
-        //
+        $rating = Rating::create($request->validated());
+        return response()->json([
+            'success' => true,
+            'data' => $rating,
+        ], 201);
     }
 
     /**
@@ -53,7 +60,12 @@ class RatingController extends Controller
      */
     public function update(UpdateRatingRequest $request, Rating $rating)
     {
-        //
+        $rating->update($request->validated());
+
+        return response()->json([
+            'success' => true,
+            'data' => $rating,
+        ]);
     }
 
     /**
@@ -61,6 +73,11 @@ class RatingController extends Controller
      */
     public function destroy(Rating $rating)
     {
-        //
+        $rating->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Rating deleted successfully',
+        ]);
     }
 }

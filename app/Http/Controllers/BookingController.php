@@ -63,7 +63,10 @@ class BookingController extends Controller
      */
     public function show(Booking $booking):JsonResponse
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $booking,
+        ]);
     }
 
     /**
@@ -71,22 +74,48 @@ class BookingController extends Controller
      */
     public function edit(Booking $booking)
     {
-        //
+        return response()->json([
+            'success' => true,
+            'data' => $booking,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateBookingRequest $request, Booking $booking)
+    public function update(UpdateBookingRequest $request, Booking $booking): JsonResponse
     {
-        //
+        $request->validate([
+
+            'room_id' => 'exists:rooms,id',
+            'user_id' => 'exists:users,id',
+            'check_in' => 'date',
+            'check_out' => 'date|after:check_in',
+            'total_amount' => 'integer',
+            'booking_status' => 'in:pending,confirmed,canceled,completed',
+            'payment_status' => 'in:pending,paid,refunded',
+            'cancellation_date' => 'date',
+
+        ]);
+
+        $booking->update($request->all());
+
+        return response()->json([
+            'success' => true,
+            'data' => $booking,
+        ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Booking $booking)
+    public function destroy(Booking $booking): JsonResponse
     {
-        //
+        $booking->delete();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Booking deleted successfully',
+        ]);
     }
 }
