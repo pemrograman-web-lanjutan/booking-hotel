@@ -17,7 +17,11 @@ class RoomTypeFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'name' => $this->faker->randomElement(['Single', 'Double', 'Suite', 'Deluxe']),
+            'description' => $this->faker->sentence(),
+            'max_occupancy' => $this->faker->numberBetween(1, 4),
+            'amenities' => implode(', ', $this->faker->randomElements(['WiFi', 'TV', 'Air Conditioning', 'Mini Bar', 'Safe'], 3)),
+            'bed_type' => $this->faker->randomElement(['single', 'double', 'twin', 'king', 'queen']),
         ];
     }
 }

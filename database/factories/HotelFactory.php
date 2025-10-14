@@ -17,7 +17,12 @@ class HotelFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'nama_hotel' => $this->faker->company(),
+            'id_review' => $this->faker->numberBetween(1, 10),
+            'alamat_hotel' => $this->faker->address(),
+            'cabang_hotel' => $this->faker->city(),
+            'lat' => $this->faker->latitude(),
+            'lng' => $this->faker->longitude(),
         ];
     }
 }

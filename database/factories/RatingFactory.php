@@ -17,7 +17,8 @@ class RatingFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'id_review' => fake()->numberBetween(1, 10),
+            'rate' => fake()->randomFloat(1, 1, 5),
         ];
     }
 }

@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('room_types', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string("name");
             $table->integer("max_occupancy")->default(1);
             $table->text("amenities")->nullable();
             $table->text('description')->nullable();
