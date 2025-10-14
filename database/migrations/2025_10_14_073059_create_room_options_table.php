@@ -11,14 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hotels', function (Blueprint $table) {
+        Schema::create('room_options', function (Blueprint $table) {
             $table->id();
-            $table->integer('id_review')->foreign()->references('id')->on('reviews')->onDelete('cascade');
-            $table->string("nama_hotel");
-            $table->string("alamat_hotel");
-            $table->string("cabang_hotel");
-            $table->double("lat");
-            $table->double("lng");
+            $table->foreignId('room_id')->constrained()->onDelete('cascade');
+            $table->boolean('is_include_breakfast')->nullable()->default(false);
+            $table->integer('base_price');
             $table->timestamps();
         });
     }
@@ -28,6 +25,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hotels');
+        Schema::dropIfExists('room_options');
     }
 };

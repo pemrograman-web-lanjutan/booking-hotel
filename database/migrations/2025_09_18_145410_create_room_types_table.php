@@ -15,7 +15,6 @@ return new class extends Migration
             $table->text("amenities")->nullable();
             $table->text('description')->nullable();
             $table->enum('bed_type', ['single', 'double', "twin", "king", "queen"])->default('single');
-            $table->decimal('base_price', 10, 2);  // Changed from integer to decimal
             $table->timestamps();
         });
     }
