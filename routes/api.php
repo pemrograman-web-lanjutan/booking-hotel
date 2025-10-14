@@ -5,13 +5,18 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\RoomTypeController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoomController;
-use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\MediaRoomController;
 use App\Http\Controllers\RatingController;
 use App\Http\Controllers\PaymentController;
+use App\Http\Controllers\HotelController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ReviewController;
 
 
 Route::middleware('api')->group(function () {
+    Route::prefix("index")->group(function () {
+        Route::get('/', [\App\Http\Controllers\IndexController::class, 'index']);
+    });
 
     Route::prefix("booking")->group(function () {
         Route::apiResource('bookings', BookingController::class);
@@ -51,7 +56,7 @@ Route::middleware('api')->group(function () {
 
 });
 
-Route::get("/hello", function() {
+Route::get("/hello", function () {
     return response()->json([
         'message' => 'Hello, World!'
     ]);

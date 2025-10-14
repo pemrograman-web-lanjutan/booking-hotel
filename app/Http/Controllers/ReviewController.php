@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\Reviews;
 use App\Http\Requests\StorereviewsRequest;
 use App\Http\Requests\UpdatereviewsRequest;
+use App\Models\Review;
+use Illuminate\Http\Request;
 
-class ReviewsController extends Controller
+class ReviewController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,7 +17,7 @@ class ReviewsController extends Controller
     {
         return response()->json([
             'success' => true,
-            'data' => Reviews::all(),
+            'data' => Review::all(),
         ]);
     }
 
@@ -39,7 +41,7 @@ class ReviewsController extends Controller
             'comment' => 'nullable|string|max:1000',
         ]);
 
-        $reviews = Reviews::create($request->all());
+        $reviews = Review::create($request->all());
 
         return response()->json([
             'success' => true,
@@ -50,7 +52,7 @@ class ReviewsController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Reviews $reviews)
+    public function show(review $review)
     {
         //
     }
@@ -58,7 +60,7 @@ class ReviewsController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Reviews $reviews)
+    public function edit(review $review)
     {
         //
     }
@@ -66,22 +68,22 @@ class ReviewsController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateReviewsRequest $request, Reviews $reviews)
+    public function update(Request $request, Review $review)
     {
-        $reviews->update($request->validated());
+        $review->update($request->validated());
 
         return response()->json([
             'success' => true,
-            'data' => $reviews,
+            'data' => $review,
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(reviews $reviews)
+    public function destroy(Review $review)
     {
-        $reviews->delete();
+        $review->delete();
 
         return response()->json([
             'success' => true,
