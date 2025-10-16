@@ -11,6 +11,7 @@ return new class extends Migration {
      */
     public function up(): void
     {
+        DB::statement('DROP VIEW IF EXISTS hotel_room_type_room_options');
         DB::statement(<<<SQL
 CREATE VIEW hotel_room_type_room_options AS
 SELECT
@@ -44,6 +45,6 @@ SQL
      */
     public function down(): void
     {
-        DB::statement('DROP VIEW IF EXISTS hotel_room_type_room_options;');
+        DB::statement('DROP VIEW IF EXISTS hotel_room_type_room_options');
     }
 };

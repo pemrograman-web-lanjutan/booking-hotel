@@ -17,4 +17,14 @@ class IndexController extends Controller
             'data' => $data
         ]);
     }
+
+    public function ulasan(){
+        DB::table('v_hotel_user_rating_review')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data ulasan, rating, user, dan hotel berhasil diambil',
+            'data' => DB::table('v_hotel_user_rating_review')->get()
+        ]);
+    }
 }

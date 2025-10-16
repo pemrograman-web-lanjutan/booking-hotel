@@ -11,11 +11,20 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\HotelController;
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\IndexController;
+use App\Http\Controllers\AuthController;
 
 
 Route::middleware('api')->group(function () {
+    Route::post('/register', [AuthController::class, 'register']);
+    Route::post('/login', [AuthController::class, 'login']);
+
     Route::prefix("index")->group(function () {
-        Route::get('/', [\App\Http\Controllers\IndexController::class, 'index']);
+        Route::get('/', [IndexController::class, 'index']);
+    });
+
+    Route::prefix('ulasan')->group(function () {
+        Route::get('/', [IndexController::class, 'ulasan']);
     });
 
     Route::prefix("booking")->group(function () {
