@@ -20,15 +20,12 @@ return new class extends Migration
                 h.nama_hotel,
                 u.id AS user_id,
                 u.name AS user_name,
-                r.id AS rating_id,
-                r.rate AS rate_value,
                 rev.id AS review_id,
                 rev.judul AS judul_review,
                 rev.deskripsi AS deskripsi_review
             FROM hotels h
             JOIN reviews rev ON rev.hotel_id = h.id
             JOIN users u ON rev.user_id = u.id
-            JOIN ratings r ON r.id_review = rev.id
         SQL);
     }
 
