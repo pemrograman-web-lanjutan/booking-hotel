@@ -56,9 +56,7 @@ Route::middleware('api')->group(function () {
 
     Route::middleware(["auth:sanctum"])->group(function (){
 
-        Route::prefix('reviews')->group(function () {
-            Route::apiResource('/', ReviewController::class);
-        });
+        Route::apiResource('reviews', ReviewController::class);
 
     });
 

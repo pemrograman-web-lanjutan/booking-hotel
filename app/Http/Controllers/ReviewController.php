@@ -35,24 +35,24 @@ class ReviewController extends Controller
     public function store(StorereviewsRequest $request)
     {
         $validatedData = $request->validate([
-            'user_id' => 'required|integer|exists:users,id',
             'hotel_id' => 'required|integer|exists:hotels,id',
             'rating' => 'required|integer|min:1|max:5',
-            'judul' => 'required|string|max:1000',
-            'deeskripsi' => 'required|string|max:1000',
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'required|string|max:1000',
         ]);
 
-        $reviews = Review::create([
-            'user_id' => Auth::user()->id,
+        $review = Review::create([
+            'user_id' => Auth::id(),
             'hotel_id' => $validatedData['hotel_id'],
             'rating' => $validatedData['rating'],
-            'comment' => $validatedData['comment'],
+            'judul' => $validatedData['judul'],
+            'deskripsi' => $validatedData['deskripsi'],
         ]);
 
         return response()->json([
             'success' => true,
-            'data' => $reviews,
-            'message' => 'Review created successfully',
+            'message' => 'Review berhasil dibuat',
+            'data' => $review
         ], 201);
     }
 
