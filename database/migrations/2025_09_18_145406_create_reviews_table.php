@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer("hotel_id")->foreign()->references('id')->on('hotels')->onDelete('cascade');
             $table->string("judul", 50);
             $table->text("deskripsi");
+            $table->integer("rating");
             $table->timestamps();
         });
     }

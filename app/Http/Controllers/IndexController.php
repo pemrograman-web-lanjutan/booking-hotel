@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Hotel;
 
 class IndexController extends Controller
 {
@@ -14,6 +15,17 @@ class IndexController extends Controller
         return response()->json([
             'status' => 'success',
             'message' => 'Data hotel & room options berhasil diambil',
+            'data' => $data
+        ]);
+    }
+
+    public function hotel() {
+
+        $data = Hotel::all();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data hotel berhasil diambil',
             'data' => $data
         ]);
     }
