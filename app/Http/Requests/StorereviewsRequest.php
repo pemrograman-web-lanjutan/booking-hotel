@@ -11,7 +11,7 @@ class StorereviewsRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,10 @@ class StorereviewsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'hotel_id' => 'required|integer|exists:hotels,id',
+            'rating' => 'required|integer|min:1|max:5',
+            'judul' => 'required|string|max:255',
+            'deskripsi' => 'required|string|max:1000',
         ];
     }
 }

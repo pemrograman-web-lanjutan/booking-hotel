@@ -7,6 +7,8 @@ use App\Http\Requests\StorereviewsRequest;
 use App\Http\Requests\UpdatereviewsRequest;
 use App\Models\Review;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
 
 class ReviewController extends Controller
 {
@@ -32,10 +34,12 @@ class ReviewController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StorereviewsRequest $request)
+    public function store(Request $request)
     {
+
         $validatedData = $request->validate([
             'hotel_id' => 'required|integer|exists:hotels,id',
+            // 'hotel_id' => 'nullable|integer',    
             'rating' => 'required|integer|min:1|max:5',
             'judul' => 'required|string|max:255',
             'deskripsi' => 'required|string|max:1000',
@@ -43,7 +47,7 @@ class ReviewController extends Controller
 
         $review = Review::create([
             'user_id' => Auth::id(),
-            'hotel_id' => $validatedData['hotel_id'],
+            'hotel_id' => $validatedData['hotel_id'] ?? 0,
             'rating' => $validatedData['rating'],
             'judul' => $validatedData['judul'],
             'deskripsi' => $validatedData['deskripsi'],
