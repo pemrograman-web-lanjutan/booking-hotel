@@ -21,7 +21,7 @@ class ReviewFactory extends Factory
             'hotel_id' => fake()->numberBetween(1, 10),
             'judul' => fake()->sentence(3, true),
             'deskripsi' => fake()->paragraphs(3, true),
-            
+            'rating' => fake()->numberBetween(1, 5),
         ];
     }
 }
