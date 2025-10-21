@@ -17,16 +17,16 @@ use App\Http\Controllers\AuthController;
 
 Route::middleware('api')->group(function () {
 
-    
+
     Route::post('/register', [AuthController::class, 'register']);
 
     Route::post('/login', [AuthController::class, 'login']);
 
-    
+
     Route::prefix("index")->group(function () {
-        
+
         Route::get("/hotel", [IndexController::class, 'hotel']);
-        
+
     });
 
     Route::prefix('ulasan')->group(function () {
@@ -49,12 +49,8 @@ Route::middleware('api')->group(function () {
         Route::apiResource('payments', PaymentController::class);
     });
 
-    Route::prefix('ratings')->group(function () {
-        Route::apiResource('ratings', RatingController::class);
-    });
 
-
-    Route::middleware(["auth:sanctum"])->group(function (){
+    Route::middleware(["auth:sanctum"])->group(function () {
 
         Route::apiResource('reviews', ReviewController::class);
 
