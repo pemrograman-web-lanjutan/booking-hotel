@@ -15,6 +15,7 @@ return new class extends Migration
             $table->text("amenities")->nullable();
             $table->text('description')->nullable();
             $table->enum('bed_type', ['single', 'double', "twin", "king", "queen"])->default('single');
+            $table->integer('price_per_night')->default(0);
             $table->timestamps();
         });
     }

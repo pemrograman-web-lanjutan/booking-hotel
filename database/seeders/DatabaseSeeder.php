@@ -22,5 +22,6 @@ class DatabaseSeeder extends Seeder
         Review::factory(10)->create();
         Hotel::factory(5)->create();
         Room::factory(20)->create();
+        Booking::factory(15)->create();
     }
 }

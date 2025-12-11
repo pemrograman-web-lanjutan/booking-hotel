@@ -21,7 +21,7 @@ return new class extends Migration
             $table->enum('booking_status', ["pending", "confirmed", "canceled", "completed"])->default('pending');
             $table->enum('payment_status', ["pending", "paid", "refunded"])->default('pending');
             $table->timestamp('booking_date')->useCurrent();
-            $table->timestamp('cancellation_date');
+            $table->timestamp('cancellation_date')->nullable();
             $table->timestamps();
         });
     }

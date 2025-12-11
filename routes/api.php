@@ -68,6 +68,9 @@ Route::middleware('api')->group(function () {
         Route::apiResource('users', UserController::class);
     });
 
+    Route::prefix('search-rooms')->group(function () {
+        Route::get('/', [IndexController::class, 'searchRoom']);
+    });
 });
 
 Route::get("/hello", function () {

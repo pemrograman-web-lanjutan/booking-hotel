@@ -22,6 +22,7 @@ class RoomTypeFactory extends Factory
             'max_occupancy' => $this->faker->numberBetween(1, 4),
             'amenities' => implode(', ', $this->faker->randomElements(['WiFi', 'TV', 'Air Conditioning', 'Mini Bar', 'Safe'], 3)),
             'bed_type' => $this->faker->randomElement(['single', 'double', 'twin', 'king', 'queen']),
+            'price_per_night' => $this->faker->numberBetween(300000, 2000000),
         ];
     }
 }
