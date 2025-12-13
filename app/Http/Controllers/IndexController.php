@@ -83,16 +83,7 @@ class IndexController extends Controller
                 $q->where('hrtro.max_occupancy', '>=', $jumlah_tamu)
             )
 
-            ->select(
-                'hrtro.hotel_id',
-                'hrtro.nama_hotel',
-                'hrtro.room_type_id',
-                'hrtro.room_id',
-                'hrtro.room_number',
-                'hrtro.max_occupancy',
-                'hrtro.cabang_hotel',
-                'r.status as room_status' // optional: sertakan status kalau mau dicek di response
-            )
+            ->select('hrtro.*')
 
             ->get();
 

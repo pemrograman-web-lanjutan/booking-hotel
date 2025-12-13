@@ -71,6 +71,10 @@ Route::middleware('api')->group(function () {
     Route::prefix('search-rooms')->group(function () {
         Route::get('/', [IndexController::class, 'searchRoom']);
     });
+
+    Route::prefix('rooms-latest')->group(function () {
+        Route::get('/', [IndexController::class, 'latestRooms']);
+    });
 });
 
 Route::get("/hello", function () {
