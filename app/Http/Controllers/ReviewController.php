@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Reviews;
+use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StorereviewsRequest;
 use App\Http\Requests\UpdatereviewsRequest;
 use App\Models\Review;
@@ -59,6 +61,31 @@ class ReviewController extends Controller
             'data' => $review
         ], 201);
     }
+
+    public function reviewsByHotel($id)
+    {
+        $reviews = \DB::table('v_hotel_user_rating_review')
+            ->where('hotel_id', $id)
+            ->whereNotNull('review_id')
+            ->orderBy('review_id', 'desc')
+            ->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $reviews
+        ]);
+    }
+
+    public function showReviewsByHotel($hotelId)
+    {
+        $reviews = Review::where('hotel_id', $hotelId)->get();
+
+        return response()->json([
+            'success' => true,
+            'data' => $reviews,
+        ]);
+    }
+
 
     /**
      * Display the specified resource.

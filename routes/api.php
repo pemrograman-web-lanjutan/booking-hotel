@@ -15,6 +15,7 @@ use App\Http\Controllers\IndexController;
 use App\Http\Controllers\AuthController;
 
 
+
 Route::middleware('api')->group(function () {
 
 
@@ -39,6 +40,10 @@ Route::middleware('api')->group(function () {
 
     Route::prefix("hotel")->group(function () {
         Route::apiResource('hotels', HotelController::class);
+        Route::get('{id}/reviews', [ReviewController::class, 'reviewsByHotel']);
+
+        Route::get("hotels/{hotelId}", [ReviewController::class, 'showReviewsByHotel']);
+
     });
 
     Route::prefix('media-rooms')->group(function () {

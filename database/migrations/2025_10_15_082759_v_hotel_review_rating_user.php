@@ -1,18 +1,18 @@
 <?php
 
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         DB::statement('DROP VIEW IF EXISTS v_hotel_user_rating_review');
-        
+
         DB::statement(<<<SQL
             CREATE VIEW v_hotel_user_rating_review AS
             SELECT 
@@ -21,6 +21,7 @@ return new class extends Migration
                 u.id AS user_id,
                 u.name AS user_name,
                 rev.id AS review_id,
+                rev.rating AS rating_review,
                 rev.judul AS judul_review,
                 rev.deskripsi AS deskripsi_review
             FROM hotels h
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('v_hotel_user_rating_review');
+        DB::statement('DROP VIEW IF EXISTS v_hotel_user_rating_review');
     }
 };

@@ -19,9 +19,10 @@ class IndexController extends Controller
         ]);
     }
 
-    public function hotel() {
-
-        $data = Hotel::all();
+    public function hotel()
+    {
+        $data = DB::table('v_hotel_detail_review')->get();
+        // $data = Hotel::all();
 
         return response()->json([
             'status' => 'success',
@@ -30,7 +31,8 @@ class IndexController extends Controller
         ]);
     }
 
-    public function ulasan(){
+    public function ulasan()
+    {
         return response()->json([
             'status' => 'success',
             'message' => 'Data ulasan, rating, user, dan hotel berhasil diambil',
@@ -38,12 +40,13 @@ class IndexController extends Controller
         ]);
     }
 
-    public function searchRoom(Request $request){
+    public function searchRoom(Request $request)
+    {
 
         $cabang_hotel = $request->input('kota_tujuan');
         $jumlah_tamu = $request->input('jumlah_tamu', 1);
-        $checkIn     = $request->input('checkin');
-        $checkOut    = $request->input('checkout');
+        $checkIn = $request->input('checkin');
+        $checkOut = $request->input('checkout');
 
         // dd([
         //     'cabang_hotel' => $cabang_hotel,
@@ -61,7 +64,7 @@ class IndexController extends Controller
             ->leftJoin('bookings AS b', function ($join) use ($checkIn, $checkOut) {
                 $join->on('b.room_id', '=', 'hrtro.room_id')
                     ->where(function ($query) use ($checkIn, $checkOut) {
-                        $query->where('b.check_in', '<',  $checkOut)
+                        $query->where('b.check_in', '<', $checkOut)
                             ->where('b.check_out', '>', $checkIn)
                             ->whereIn('b.booking_status', ['pending', 'confirmed']);
                     });
@@ -74,12 +77,16 @@ class IndexController extends Controller
             ->where('r.status', 'available')
 
             // FILTER CABANG HOTEL / KOTA TUJUAN
-            ->when($cabang_hotel, fn ($q) =>
+            ->when(
+                $cabang_hotel,
+                fn($q) =>
                 $q->where('hrtro.cabang_hotel', 'LIKE', "%{$cabang_hotel}%")
             )
 
             // FILTER KAPASITAS TAMU
-            ->when($jumlah_tamu, fn($q) =>
+            ->when(
+                $jumlah_tamu,
+                fn($q) =>
                 $q->where('hrtro.max_occupancy', '>=', $jumlah_tamu)
             )
 
@@ -95,8 +102,9 @@ class IndexController extends Controller
 
 
     }
-    
-    public function latestRooms() {
+
+    public function latestRooms()
+    {
         $rooms = Room::latest()->get();
 
         return response()->json([
