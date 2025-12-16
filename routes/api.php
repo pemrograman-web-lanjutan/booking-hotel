@@ -34,8 +34,8 @@ Route::middleware('api')->group(function () {
         Route::get('/', [IndexController::class, 'ulasan']);
     });
 
-    Route::prefix("booking")->group(function () {
-        Route::apiResource('bookings', BookingController::class);
+    Route::prefix("bookings")->group(function () {
+        Route::apiResource('/', BookingController::class);
     });
 
     Route::prefix("hotel")->group(function () {
@@ -62,7 +62,9 @@ Route::middleware('api')->group(function () {
     });
 
     Route::prefix('rooms')->group(function () {
-        Route::apiResource('rooms', RoomController::class);
+        Route::apiResource('/', RoomController::class);
+        
+        Route::get('room-and-hotel', [RoomController::class, 'getRoomAndHotel']);
     });
 
     Route::prefix('room-types')->group(function () {
@@ -70,7 +72,7 @@ Route::middleware('api')->group(function () {
     });
 
     Route::prefix('users')->group(function () {
-        Route::apiResource('users', UserController::class);
+        Route::apiResource('/', UserController::class);
     });
 
     Route::prefix('search-rooms')->group(function () {

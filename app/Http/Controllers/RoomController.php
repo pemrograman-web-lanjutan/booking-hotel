@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Room;
+use App\Models\Hotel;
 use App\Http\Requests\StoreRoomRequest;
 use App\Http\Requests\UpdateRoomRequest;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 class RoomController extends Controller
 {
     /**
@@ -99,5 +101,54 @@ class RoomController extends Controller
             'success' => true,
             'message' => 'Room deleted successfully',
         ]);
+    }
+
+    /**
+     * Get rooms with hotel information using JOIN
+     * Menampilkan: id room, room number, nama hotel
+     * 
+     * @return JsonResponse
+     */
+    public function getRoomAndHotel(): JsonResponse
+    {
+        // CARA 1: Menggunakan Eloquent with() - Paling Mudah & Recommended
+        // Ini menggunakan Eager Loading, lebih efisien dan code lebih bersih
+        $roomsWithHotel = Room::with('hotel:id,nama_hotel')
+            ->select('id', 'room_number', 'id_hotel')
+            ->get()
+            ->map(function($room) {
+                return [
+                    'id' => $room->id,
+                    'room_number' => $room->room_number,
+                    'hotel_name' => $room->hotel->nama_hotel ?? 'N/A',
+                ];
+            });
+
+        // CARA 2: Menggunakan Query Builder dengan JOIN - Like SQL
+        // Ini menggunakan INNER JOIN seperti SQL biasa
+        $roomsJoin = DB::table('rooms')
+            ->join('hotels', 'rooms.id_hotel', '=', 'hotels.id')
+            ->select('rooms.id', 'rooms.room_number', 'hotels.nama_hotel as nama_hotel')
+            ->get();
+
+        // CARA 3: Menggunakan Raw Query - Paling Fleksibel
+        // Gunakan ini kalau butuh query yang sangat custom
+        $roomsRaw = DB::select('
+            SELECT 
+                rooms.id, 
+                rooms.room_number, 
+                hotels.nama_hotel as nama_hotel
+            FROM rooms
+            INNER JOIN hotels ON rooms.id_hotel = hotels.id
+        ');
+
+        // Return salah satu cara (saya pilih cara 2 - Query Builder JOIN)
+        // Anda bisa ganti ke $roomsWithHotel atau $roomsRaw sesuai kebutuhan
+        return response()->json([
+            'success' => true,
+            'data' => $roomsJoin,
+            'count' => count($roomsJoin),
+        ]);
+
     }
 }

@@ -6,6 +6,8 @@ use App\Models\Booking;
 use App\Http\Requests\StoreBookingRequest;
 use App\Http\Requests\UpdateBookingRequest;
 use Illuminate\Http\JsonResponse;
+use Carbon\Carbon;
+use App\Models\Room;
 
 class BookingController extends Controller
 {
@@ -43,14 +45,25 @@ class BookingController extends Controller
     public function store(StoreBookingRequest $request):JsonResponse
     {
         $request->validate([
-            'id_user' => 'required|exists:users,id',
-            'id_room' => 'required|exists:rooms,id',
+            'user_id' => 'required|exists:users,id',
+            'room_id' => 'required|exists:rooms,id',
             'check_in' => 'required|date',
             'check_out' => 'required|date|after:check_in',
-            'status' => 'required|in:booked,checked_in,checked_out,cancelled',
+            'cancellation_date' => 'nullable|date',
         ]);
 
-        $booking = Booking::create($request->all());
+        $checkIn = Carbon::parse($request->check_in);
+        $checkOut = Carbon::parse($request->check_out);
+        $totalNights = $checkIn->diffInDays($checkOut);
+
+        $room = Room::with('roomType')->findOrFail($request->room_id);
+        $totalAmount = $totalNights * $room->roomType->price_per_night;
+
+        $data = $request->all();
+        $data['total_nights'] = $totalNights;
+        $data['total_amount'] = $totalAmount;
+
+        $booking = Booking::create($data);
 
         return response()->json([
             'success' => true,

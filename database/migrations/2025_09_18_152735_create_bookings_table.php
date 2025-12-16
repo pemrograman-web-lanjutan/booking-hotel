@@ -18,7 +18,8 @@ return new class extends Migration
             $table->date('check_in');
             $table->date('check_out');
             $table->integer("total_amount");
-            $table->enum('booking_status', ["pending", "confirmed", "canceled", "completed"])->default('pending');
+            $table->integer("total_nights");
+            $table->enum('booking_status', ["pending", "confirmed", "cancelled", "completed"])->default('pending');
             $table->enum('payment_status', ["pending", "paid", "refunded"])->default('pending');
             $table->timestamp('booking_date')->useCurrent();
             $table->timestamp('cancellation_date')->nullable();
