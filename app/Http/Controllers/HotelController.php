@@ -5,13 +5,15 @@ namespace App\Http\Controllers;
 use App\Models\Hotel;
 use App\Http\Requests\StoreHotelRequest;
 use App\Http\Requests\UpdateHotelRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 
 class HotelController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index():JsonReponse
+    public function index(): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -19,6 +21,41 @@ class HotelController extends Controller
         ]);
     }
 
+    public function roomsByHotel(int $hotelId): JsonResponse
+    {
+
+        $data = DB::table('v_rooms_detail')
+            ->where('id_hotel', $hotelId)
+            ->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data rooms berhasil diambil',
+            'data' => $data
+        ]);
+    }
+
+    public function showRoomDetail(int $roomId): JsonResponse
+    {
+        // Menggunakan view/tabel yang sama dengan roomsByHotel
+        $room = DB::table('v_rooms_detail')
+            ->where('id', $roomId) // Filter berdasarkan ID kamar
+            ->first(); // Ambil hanya satu hasil
+
+        if (!$room) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Detail kamar tidak ditemukan.',
+                'data' => null
+            ], 404); // Mengembalikan status 404 jika data tidak ada
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Detail kamar berhasil diambil',
+            'data' => $room
+        ]);
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -53,7 +90,7 @@ class HotelController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Hotel $hotel):JsonResponse
+    public function show(Hotel $hotel): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -65,7 +102,7 @@ class HotelController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Hotel $hotel):JsonResponse
+    public function edit(Hotel $hotel): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -73,13 +110,13 @@ class HotelController extends Controller
         ]);
     }
 
-        //
-    
+    //
+
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHotelRequest $request, Hotel $hotel):JsonResponse
+    public function update(UpdateHotelRequest $request, Hotel $hotel): JsonResponse
     {
         $request->validate([
             'name' => 'required|string|max:100',
