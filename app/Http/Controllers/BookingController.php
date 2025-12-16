@@ -107,11 +107,22 @@ class BookingController extends Controller
             'total_amount' => 'integer',
             'booking_status' => 'in:pending,confirmed,canceled,completed',
             'payment_status' => 'in:pending,paid,refunded',
-            'cancellation_date' => 'date',
 
         ]);
 
-        $booking->update($request->all());
+        
+
+        $data = $request->all();
+
+        if ($request->has('booking_status')) {
+            if ($request->booking_status === 'canceled') {
+                $data['cancellation_date'] = now();
+            } else {
+                $data['cancellation_date'] = null;
+            }
+        }
+
+        $booking->update($data);
 
         return response()->json([
             'success' => true,
