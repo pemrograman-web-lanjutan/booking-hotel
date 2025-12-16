@@ -34,7 +34,7 @@ Route::middleware('api')->group(function () {
         Route::get('/', [IndexController::class, 'ulasan']);
     });
 
-    Route::apiResource('bookings', BookingController::class);
+    // Route::apiResource('bookings', BookingController::class);
 
     Route::prefix("hotel")->group(function () {
         Route::apiResource('hotels', HotelController::class);
@@ -57,6 +57,7 @@ Route::middleware('api')->group(function () {
 
 
     Route::middleware(["auth:sanctum"])->group(function () {
+        Route::apiResource('bookings', BookingController::class);
 
         Route::apiResource('reviews', ReviewController::class);
 

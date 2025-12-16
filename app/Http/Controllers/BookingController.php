@@ -14,11 +14,11 @@ class BookingController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index():JsonResponse
+    public function index(): JsonResponse
     {
         $bookings = Booking::all();
 
-        if($bookings->isEmpty()) {
+        if ($bookings->isEmpty()) {
             return response()->json([
                 'success' => false,
                 'message' => 'No bookings found',
@@ -36,13 +36,13 @@ class BookingController extends Controller
      */
     public function create()
     {
-        
+
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreBookingRequest $request):JsonResponse
+    public function store(StoreBookingRequest $request): JsonResponse
     {
         $request->validate([
             'user_id' => 'required|exists:users,id',
@@ -74,7 +74,7 @@ class BookingController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Booking $booking):JsonResponse
+    public function show(Booking $booking): JsonResponse
     {
         return response()->json([
             'success' => true,
@@ -105,21 +105,35 @@ class BookingController extends Controller
             'check_in' => 'date',
             'check_out' => 'date|after:check_in',
             'total_amount' => 'integer',
-            'booking_status' => 'in:pending,confirmed,canceled,completed',
+            'booking_status' => 'in:pending,confirmed,cancelled,completed',
             'payment_status' => 'in:pending,paid,refunded',
 
         ]);
 
-        
+
 
         $data = $request->all();
 
+        if ($request->hasAny(['check_in', 'check_out', 'room_id'])) {
+
+            $checkIn = Carbon::parse($request->check_in ?? $booking->check_in);
+            $checkOut = Carbon::parse($request->check_out ?? $booking->check_out);
+
+            $totalNights = $checkIn->diffInDays($checkOut);
+
+            $room = Room::with('roomType')->findOrFail(
+                $request->room_id ?? $booking->room_id
+            );
+
+            $data['total_nights'] = $totalNights;
+            $data['total_amount'] = $totalNights * $room->roomType->price_per_night;
+        }
+
         if ($request->has('booking_status')) {
-            if ($request->booking_status === 'canceled') {
-                $data['cancellation_date'] = now();
-            } else {
-                $data['cancellation_date'] = null;
-            }
+            $data['cancellation_date'] =
+                $request->booking_status === 'cancelled'
+                ? now()
+                : null;
         }
 
         $booking->update($data);

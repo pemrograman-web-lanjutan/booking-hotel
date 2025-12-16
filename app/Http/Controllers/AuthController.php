@@ -29,10 +29,10 @@ class AuthController extends Controller
                 ],
                 'token' => $token
             ], 200)
-            ->withHeaders([
-                'Access-Control-Allow-Credentials' => 'true',
-                'Access-Control-Allow-Origin' => 'http://localhost:3000',
-            ]);
+                ->withHeaders([
+                    'Access-Control-Allow-Credentials' => 'true',
+                    'Access-Control-Allow-Origin' => 'http://localhost:3000',
+                ]);
         }
 
         return response()->json([
@@ -40,8 +40,9 @@ class AuthController extends Controller
         ], 401);
     }
 
-    public function register(Request $request){
-        try{
+    public function register(Request $request)
+    {
+        try {
 
             $validatedData = $request->validate([
                 'name' => 'required|string|max:255',
@@ -50,7 +51,7 @@ class AuthController extends Controller
                 'phone_number' => 'required|string|max:20|unique:users',
                 'gender' => 'required|in:male,female',
             ]);
-    
+
             $user = User::create([
                 'name' => $validatedData['name'],
                 'email' => $validatedData['email'],
@@ -59,18 +60,18 @@ class AuthController extends Controller
                 'gender' => $validatedData['gender'],
                 'role' => 'guest',
             ]);
-    
+
             $token = $user->createToken('auth-token')->plainTextToken;
-    
+
             return response()->json([
                 'message' => 'User registered successfully',
                 'user' => $user,
                 'token' => $token
             ], 201)->withHeaders([
-                'Access-Control-Allow-Credentials' => 'true',
-                'Access-Control-Allow-Origin' => 'http://localhost:3000',
-            ]);
-        }catch(ValidationException $e){
+                        'Access-Control-Allow-Credentials' => 'true',
+                        'Access-Control-Allow-Origin' => 'http://localhost:3000',
+                    ]);
+        } catch (ValidationException $e) {
             return response()->json([
                 'message' => 'Validation Error',
                 'errors' => $e->errors()
