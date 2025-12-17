@@ -18,7 +18,6 @@ class HotelFactory extends Factory
     {
         return [
             'nama_hotel' => $this->faker->company(),
-            'id_review' => $this->faker->numberBetween(1, 10),
             'alamat_hotel' => $this->faker->address(),
             'cabang_hotel' => $this->faker->randomElement(['Badung', 'Gianyar', 'Denpasar', 'Tabanan', 'Karangasem', 'Bangli', 'Buleleng', 'Klungkung', 'Jembrana', 'Nusa Penida']),
             'lat' => $this->faker->latitude(),

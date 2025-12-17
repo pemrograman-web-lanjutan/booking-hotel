@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Hotel;
+use App\Models\Room;
 
 class IndexController extends Controller
 {
@@ -21,12 +22,22 @@ class IndexController extends Controller
 
     public function hotel()
     {
-        $data = DB::table('v_hotel_detail_review')->get();
-        // $data = Hotel::all();
+        $data = Hotel::all();
 
         return response()->json([
             'status' => 'success',
             'message' => 'Data hotel berhasil diambil',
+            'data' => $data
+        ]);
+    }
+
+    public function CardHotelOnIndex()
+    {
+        $data = DB::table('v_hotel_detail_review')->get();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data hotel dengan review berhasil diambil',
             'data' => $data
         ]);
     }

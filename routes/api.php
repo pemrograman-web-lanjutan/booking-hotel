@@ -29,6 +29,8 @@ Route::middleware('api')->group(function () {
 
         Route::get("/hotel", [IndexController::class, 'hotel']);
 
+        Route::get("/get-hoteldata-review", [IndexController::class, 'CardHotelOnIndex']);
+
     });
 
     Route::prefix('ulasan')->group(function () {

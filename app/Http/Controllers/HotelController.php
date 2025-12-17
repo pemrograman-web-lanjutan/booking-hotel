@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Hotel;
+use Illuminate\Http\Request;
 use App\Http\Requests\StoreHotelRequest;
 use App\Http\Requests\UpdateHotelRequest;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
+
 
 class HotelController extends Controller
 {
@@ -67,25 +69,24 @@ class HotelController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHotelRequest $request)
+    public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'country' => 'required|string|max:100',
-            'phone_number' => 'required|string|max:15',
-            'email' => 'required|string|email|max:100|unique:hotels',
-            'rating' => 'nullable|integer|min:1|max:5',
+        $validated = $request->validate([
+            'nama_hotel' => 'required|string|max:255',
+            'alamat_hotel' => 'required|string',
+            'cabang_hotel' => 'required|string|max:255',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
         ]);
 
-        $hotel = Hotel::create($request->all());
+        $hotel = Hotel::create($validated);
 
         return response()->json([
             'success' => true,
             'data' => $hotel,
         ], 201);
     }
+
 
     /**
      * Display the specified resource.
@@ -116,25 +117,26 @@ class HotelController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateHotelRequest $request, Hotel $hotel): JsonResponse
+    public function update(Request $request, $id)
     {
-        $request->validate([
-            'name' => 'required|string|max:100',
-            'address' => 'required|string|max:255',
-            'city' => 'required|string|max:100',
-            'country' => 'required|string|max:100',
-            'phone_number' => 'required|string|max:15',
-            'email' => 'required|string|email|max:100|unique:hotels,email,' . $hotel->id,
-            'rating' => 'nullable|integer|min:1|max:5',
+        $hotel = Hotel::findOrFail($id);
+
+        $validated = $request->validate([
+            'nama_hotel' => 'required|string|max:255',
+            'alamat_hotel' => 'required|string',
+            'cabang_hotel' => 'required|string|max:255',
+            'lat' => 'required|numeric',
+            'lng' => 'required|numeric',
         ]);
 
-        $hotel->update($request->all());
+        $hotel->update($validated);
 
         return response()->json([
-            'success' => true,
-            'data' => $hotel,
+            'message' => 'Hotel updated successfully',
+            'data' => $hotel
         ]);
     }
+
 
     /**
      * Remove the specified resource from storage.
