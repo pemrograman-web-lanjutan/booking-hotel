@@ -7,14 +7,22 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
-    /** @use HasFactory<\Database\Factories\BookingFactory> */
     use HasFactory;
 
-    public $guarded = ['id', 'created_at', 'updated_at'];
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    public function payment(){
-
+    public function payment()
+    {
         return $this->hasOne(Payment::class);
+    }
 
+    public function room()
+    {
+        return $this->belongsTo(Room::class);
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
     }
 }

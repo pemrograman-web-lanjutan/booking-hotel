@@ -13,6 +13,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\IndexController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserBookingController;
 
 
 
@@ -58,8 +59,14 @@ Route::middleware('api')->group(function () {
 
     Route::middleware(["auth:sanctum"])->group(function () {
         Route::apiResource('bookings', BookingController::class);
-
         Route::apiResource('reviews', ReviewController::class);
+
+        Route::prefix('user')->group(function () {
+            Route::get('/bookings', [UserBookingController::class, 'index']);
+            Route::get('/bookings/{id}', [UserBookingController::class, 'show']);
+        });
+
+
 
     });
 
