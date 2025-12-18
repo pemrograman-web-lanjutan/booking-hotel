@@ -39,10 +39,17 @@ class RoomController extends Controller
         $request->validate([
             'room_number' => 'required|unique:rooms,room_number',
             'id_rooms_type' => 'required|exists:room_types,id',
+            'id_hotel' => 'required|exists:hotels,id',
+            'room_number' => 'required',
             'status' => 'required|in:available,unavailable,maintenance',
         ]);
 
         $room = Room::create($request->all());
+
+        return response()->json([
+            'success' => true,
+            'data' => $room,
+        ]);
     }
 
     /**
@@ -103,9 +110,10 @@ class RoomController extends Controller
         ]);
     }
 
+
     /**
-     * Get rooms with hotel information using JOIN
-     * Menampilkan: id room, room number, nama hotel
+     * Get rooms with hotel and room type information using JOIN
+     * Menampilkan: id room, room number, nama hotel, nama tipe kamar, harga
      * 
      * @return JsonResponse
      */
@@ -113,14 +121,16 @@ class RoomController extends Controller
     {
         // CARA 1: Menggunakan Eloquent with() - Paling Mudah & Recommended
         // Ini menggunakan Eager Loading, lebih efisien dan code lebih bersih
-        $roomsWithHotel = Room::with('hotel:id,nama_hotel')
-            ->select('id', 'room_number', 'id_hotel')
+        $roomsWithRelations = Room::with(['hotel:id,nama_hotel', 'roomType:id,name,price_per_night'])
+            ->select('id', 'room_number', 'id_hotel', 'id_rooms_type')
             ->get()
             ->map(function($room) {
                 return [
                     'id' => $room->id,
                     'room_number' => $room->room_number,
                     'hotel_name' => $room->hotel->nama_hotel ?? 'N/A',
+                    'room_type' => $room->roomType->name ?? 'N/A',
+                    'price' => $room->roomType->price_per_night ?? 0,
                 ];
             });
 
@@ -128,7 +138,14 @@ class RoomController extends Controller
         // Ini menggunakan INNER JOIN seperti SQL biasa
         $roomsJoin = DB::table('rooms')
             ->join('hotels', 'rooms.id_hotel', '=', 'hotels.id')
-            ->select('rooms.id', 'rooms.room_number', 'hotels.nama_hotel as nama_hotel')
+            ->join('room_types', 'rooms.id_rooms_type', '=', 'room_types.id')
+            ->select(
+                'rooms.id', 
+                'rooms.room_number', 
+                'hotels.nama_hotel as hotel_name',
+                'room_types.name as room_type_name',
+                'room_types.price_per_night as price'
+            )
             ->get();
 
         // CARA 3: Menggunakan Raw Query - Paling Fleksibel
@@ -137,13 +154,17 @@ class RoomController extends Controller
             SELECT 
                 rooms.id, 
                 rooms.room_number, 
-                hotels.nama_hotel as nama_hotel
+                hotels.nama_hotel as hotel_name,
+                room_types.name as room_type_name,
+                room_types.price_per_night as price
+                room_types.amenities as amenities
+                
             FROM rooms
             INNER JOIN hotels ON rooms.id_hotel = hotels.id
+            INNER JOIN room_types ON rooms.id_rooms_type = room_types.id
         ');
 
         // Return salah satu cara (saya pilih cara 2 - Query Builder JOIN)
-        // Anda bisa ganti ke $roomsWithHotel atau $roomsRaw sesuai kebutuhan
         return response()->json([
             'success' => true,
             'data' => $roomsJoin,

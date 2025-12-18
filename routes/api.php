@@ -74,9 +74,7 @@ Route::middleware('api')->group(function () {
 
     Route::apiResource('rooms', RoomController::class);
 
-
     Route::get('room-and-hotel', [RoomController::class, 'getRoomAndHotel']);
-
 
     Route::prefix('room-types')->group(function () {
         Route::apiResource('room-types', RoomTypeController::class);

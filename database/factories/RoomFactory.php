@@ -20,9 +20,9 @@ class RoomFactory extends Factory
     {
         return [
             'room_number' => $this->faker->unique()->numberBetween(100, 999),
-            'id_rooms_type' => RoomType::factory(),
+            'id_rooms_type' => $this->faker->numberBetween(1, 10),
             'status' => $this->faker->randomElement(['available', 'occupied', 'maintenance', 'out of order']),
-            'id_hotel' => Hotel::factory(),
+            'id_hotel' => $this->faker->numberBetween(1, 5),
         ];
     }
 }
