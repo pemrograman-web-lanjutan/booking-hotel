@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\Hotel;
 use App\Models\Room;
+use App\Models\Booking;
+use App\Models\User;
 
 class IndexController extends Controller
 {
@@ -122,6 +124,21 @@ class IndexController extends Controller
             'status' => 'success',
             'message' => 'Data kamar terbaru berhasil diambil',
             'data' => $rooms
+        ]);
+    }
+
+    public function stats(){
+        $stats = [
+            "total_hotels" => Hotel::count(),
+            "total_rooms" => Room::count(),
+            "total_bookings" => Booking::count(),
+            "total_users" => User::count(),
+        ];
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Data statistik berhasil diambil',
+            'data' => $stats
         ]);
     }
 }

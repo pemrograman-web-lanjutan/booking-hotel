@@ -89,6 +89,8 @@ Route::middleware('api')->group(function () {
     Route::prefix('rooms-latest')->group(function () {
         Route::get('/', [IndexController::class, 'latestRooms']);
     });
+
+    Route::get("/dashboard/stats", [IndexController::class, 'stats']);
 });
 
 Route::get("/hello", function () {
